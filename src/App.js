@@ -1,24 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Statistics from "./components/Statistics";
+import Feedback from "./components/Feedback";
 
 function App() {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  const handleGood = () => {
+    setGood((feedback) => feedback + 1);
+  };
+
+  const handleNeutral = () => {
+    setNeutral((feedback) => feedback + 1);
+  };
+
+  const handleBad = () => {
+    setBad((feedback) => feedback + 1);
+  };
+
+  const total = () => {
+    return good + bad + neutral;
+  };
+
+  const averageCalc = () => {
+    return (good - bad) / total();
+  };
+
+  const positiveCalc = () => {
+    return (good / total()) * 100;
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <h3>give feedback</h3>
+      <Feedback
+        handleGood={handleGood}
+        handleNeutral={handleNeutral}
+        handleBad={handleBad}
+      />
+      <h3>statistics</h3>
+      {total() === 0 ? (
+        "No feedback given"
+      ) : (
+        <Statistics
+          good={good}
+          bad={bad}
+          neutral={neutral}
+          all={total()}
+          average={averageCalc()}
+          positive={positiveCalc()}
+        />
+      )}
     </div>
   );
 }
